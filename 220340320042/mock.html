@@ -1,0 +1,115 @@
+<html>
+<head>
+
+<script src="jquery-3.5.1.min.js"></script>
+<script>//our scrip will come here 
+
+$(()=>{
+	console.log("Dom loaded");
+	$("#t1").blur(()=>{
+		console.log("Blur Event");
+		let ip={input:$("#t1").val()};
+		console.log(ip);
+		
+		let params={
+			data:ip,
+			url:"http://localhost:8081/Blur",
+			type:"get",
+			datatype:"json",
+			success:(data)=>{
+				if(data.status==true){
+				console.log("data got");
+				$("#t2").val(data.Bookdata[0].bookname);
+				$("#t3").val(data.Bookdata[0].price);
+				$("#msg").text("Data found in database");
+				document.querySelector("#Update").disabled=false;
+				}
+			},
+			error:(errormsg)=>{
+				if(data.status==false){
+				console.log("Book details not found");
+			$("#msg").text("Data Not found in database");
+				}
+
+		}
+			
+		};
+		$.ajax(params);
+	});
+
+	$("#Update").click(()=>{
+		console.log("update clicked");
+		let input={bookid:$("#t1").val(),price:$("#t3").val()};
+		// console.log(input);
+		let params={
+			data:input,
+			url:"http://localhost:8081/Update",
+			type:"get",
+			datatype:"json",
+			success:(data)=>{
+				if(data.status==true){
+					console.log("Bookdetails Updated Successfully");
+					$("#msg").text("Book details updated");
+					document.querySelector("#Update").disabled=true;
+
+
+				}
+			},
+			error:(error)=>{
+				console.log("Failure while updating");
+			}
+		};
+		$.ajax(params);
+	});
+
+
+
+
+});
+
+
+
+// $(document).ready(function()
+// {
+// console.log("no more sins");
+// $("#b2").click(function () 
+// 	{ 
+// 		//console.log("jquery works");
+// 		alert("jquery works")
+// 	});
+	
+// });
+
+
+</script>
+</head>
+<body>
+
+	<!-- <form action="poc2" method="get">
+	<Br/>whocares<input type="text" name="whocares"/>
+	<input type="submit" value="get"/>
+	</form>
+	
+	
+	<form action="poc1" method="post">
+	<Br/>whocares<input type="text" name="whocares"/>
+	<input type="submit" value="post"/>
+	</form> -->
+	
+	<input type="text" id="t1" placeholder="Enter Book Id"/>
+	<span id="msg">Message</span><br/><br/>
+
+
+	<input type="text" id="t2" placeholder="Enter Book Nane"/><br/><br/>
+
+
+	<input type="text" id="t3" placeholder="Enter Book Price"/><br/><br/>
+
+	
+	<button id="Update" disabled>Update Book</button>
+	
+	
+	</body>
+
+
+</html>
